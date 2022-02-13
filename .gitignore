@@ -2,3 +2,9 @@
 *~
 *.swp
 *.swo
+track/vendor
+track/vendor/*
+track/secrets/*
+composer.phar
+composer.lock
+loc.htm

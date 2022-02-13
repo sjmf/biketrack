@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>GPX Data</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v6.12.0/css/ol.css" type="text/css">
+    <script src="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v6.12.0/build/ol.js"></script>
+    <style> html,body,#map{height:100%;margin:0;overflow:hidden} </style>
+  </head>
+  <body>
+    <div id="map" class="map"></div>
+    <div id="info">&nbsp;</div>
+    <script>
+      // Get URL GET params
+      // https://stackoverflow.com/questions/901115/
+      let urlparams = new URLSearchParams(window.location.search);
+      const params = new Proxy(urlparams, {
+            get: (searchParams, prop) => searchParams.get(prop),
+      });
+
+      // Construct URL parameters for date and set them in the search field
+      let now = new Date();
+      let date = now.getFullYear() * 10000 + (now.getMonth() + 1) * 100 + now.getDate();
+
+      if(!params.from){ from = date; urlparams.set('from', from); }
+      if(!params.to)  { to = date+1; urlparams.set('to', to); }
+
+      window.history.replaceState( {} , document.title, window.location.href.split('?')[0] + '?' + urlparams + window.location.hash );
+
+
+      var raster = new ol.layer.Tile({
+          source: new ol.source.OSM()
+      });
+
+      var style = {
+        'Point': new ol.style.Style({
+          image: new ol.style.Circle({
+            fill: new ol.style.Fill({
+              color: 'rgba(255,255,0,0.4)'
+            }),
+            radius: 5,
+            stroke: new ol.style.Stroke({
+              color: '#ff0',
+              width: 1
+            })
+          })
+        }),
+        'LineString': new ol.style.Style({
+          stroke: new ol.style.Stroke({
+            color: '#f00',
+            width: 3
+          })
+        }),
+        'MultiLineString': new ol.style.Style({
+          stroke: new ol.style.Stroke({
+            color: 'rgba(0,179,255,0.8)',
+            width: 6
+          })
+        })
+      };
+
+      var vector = new ol.layer.Vector({
+        source: new ol.source.Vector({
+          //url: 'gpx.php?from=20220203&to=20220204',
+          url: 'gpx.php?from=' + params.from + '&to=' + params.to,
+          format: new ol.format.GPX()
+        }),
+        style: function(feature) {
+          return style[feature.getGeometry().getType()];
+        }
+      });
+
+      // First time the layer is rendered, 'addfeature' event will be called
+      vector.getSource().on('addfeature', function() {
+          map.getView().fit(vector.getSource().getExtent(), { padding: [40, 40, 40, 40] })
+      });
+      // From there on, 'propertychange' should be listened for 
+      vector.on('propertychange', function(evt) {
+          if (vector.getVisible() && vector.getSource().getExtent()[0] !== Infinity && vector.getSource().getExtent()[0] !== -Infinity) {
+              map.getView().fit(buffer(vector.getSource().getExtent(), 1000))
+          }
+      });
+
+      var map = new ol.Map({
+        layers: [raster, vector],
+        target: document.getElementById('map'),
+        view: new ol.View({
+          center: ol.proj.transform([-1.60700, 54.933333], 'EPSG:4326', 'EPSG:3857'),
+          zoom: 12,
+          minZoom: 3,
+          maxZoom: 18
+        })
+      });
+
+      var displayFeatureInfo = function(pixel) {
+        var features = [];
+        map.forEachFeatureAtPixel(pixel, function(feature) {
+          features.push(feature);
+        });
+        if (features.length > 0) {
+          var info = [];
+          var i, ii;
+          for (i = 0, ii = features.length; i < ii; ++i) {
+            info.push(features[i].get('desc'));
+          }
+          document.getElementById('info').innerHTML = info.join(', ') || '(unknown)';
+          map.getTarget().style.cursor = 'pointer';
+        } else {
+          document.getElementById('info').innerHTML = '&nbsp;';
+          map.getTarget().style.cursor = '';
+        }
+      };
+
+      map.on('pointermove', function(evt) {
+        if (evt.dragging) {
+          return;
+        }
+        var pixel = map.getEventPixel(evt.originalEvent);
+        displayFeatureInfo(pixel);
+      });
+
+      map.on('click', function(evt) {
+        displayFeatureInfo(evt.pixel);
+      });
+
+      //map.addControl(new ol.control.LayerSwitcher());
+
+    </script>
+  </body>
+</html>

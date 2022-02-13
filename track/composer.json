@@ -1,0 +1,8 @@
+{
+    "name": "sjmf/biketrack",
+    "description": "https://github.com/sjmf/biketrack",
+    "require": {
+        "mongodb/mongodb": "^1.11"
+    }
+}
+
