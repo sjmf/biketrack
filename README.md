@@ -39,7 +39,7 @@ and 3d-print a housing/case using my [Prusa Mini+](https://www.prusa3d.com/produ
   - [x] MMA8452Q Proof of Concept
     - [x] Interrupt-driven code PoC ([modified SparkFun Library](https://github.com/sjmf/SparkFun_MMA8452Q_Arduino_Library))
   - [ ] Low Power use on Teensy using [duff2013/Snooze](https://github.com/duff2013/Snooze)
-  - [ ] Code Integration (see Firmware Requirements)
+  - [ ] Code Integration (see [Firmware Requirements](Requirements.md))
 - [ ] Hardware implementation
   - [x] Breadboard PoC
   - [ ] Schematic design
@@ -49,8 +49,10 @@ and 3d-print a housing/case using my [Prusa Mini+](https://www.prusa3d.com/produ
 - [x] Serverside functionality
   - [x] SIM808 POST to server
   - [x] Store GPS points in [MongoDB Atlas](https://www.mongodb.com/cloud/atlas/)
-  - [ ] Retrieve GPX Track
+  - [x] Retrieve GPX Track
   - [x] Plot GPX track in OpenLayers
+  - [ ] Security (currently no authentication, no client SSL, replay attacks possible)
+  - [ ] Add field 'segmentstart' to new track segments when storing
 - [ ] Housing design
   - [ ] CAD housing for project
   - [ ] 3D-print case
