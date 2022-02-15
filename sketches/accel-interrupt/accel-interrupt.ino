@@ -7,8 +7,8 @@
 #include "SparkFun_MMA8452Q.h"    // Uses forked library for interrupt support. Install: https://github.com/sjmf/SparkFun_MMA8452Q_Arduino_Library
 #include <avr/sleep.h>
 
-#define MMA_PIN_INT1 14
-#define MMA_PIN_INT2 15
+#define MMA_PIN_INT1 20
+#define MMA_PIN_INT2 21
 #define TEENSY_LED 13
 
 #define MOTION_THRESHOLD 0x10
@@ -37,7 +37,7 @@ void setup() {
   Serial.println("Setting up interrupts!");
   accel.setInterruptsEnabled(INT_FREEFALL_MOTION);
   accel.configureInterrupts(false, false); // Active HIGH (pulled high = interrupt). Push-pull configuration.
-  accel.setInterruptPins(false, false, false, false, true, false); // True = pin 1 (here freefall_motion connected to MMA_PIN_INT1)
+  accel.setInterruptPins(false, false, false, false, false, false); // True = pin 1 (here freefall_motion connected to MMA_PIN_INT1)
   accel.setupMotionDetection(MOTION_THRESHOLD, MOTION_DEBOUNCE); // motionThreshold, debounceCount
 
   // https://forum.pjrc.com/threads/42800-Teensy-Interrupts-for-Dummies
