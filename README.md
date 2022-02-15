@@ -57,3 +57,10 @@ and 3d-print a housing/case using my [Prusa Mini+](https://www.prusa3d.com/produ
   - [ ] CAD housing for project
   - [ ] 3D-print case
 
+## Gallery
+
+Hardware progress. The devices on a breadboard:
+![The tracker hardware on an electronics breadboard](img/breadboard.jpg)
+
+Learning [Fusion 360](https://www.autodesk.co.uk/products/fusion-360/personal):
+![A CAD rendering of the PCB](img/schematic.png)
