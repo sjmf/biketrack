@@ -42,9 +42,9 @@ and 3d-print a housing/case using my [Prusa Mini+](https://www.prusa3d.com/produ
   - [ ] Code Integration (see [Firmware Requirements](Requirements.md))
 - [ ] Hardware implementation
   - [x] Breadboard PoC
-  - [ ] Schematic design
-  - [ ] PCB Design / Layout
-  - [ ] Order PCBs
+  - [x] Schematic design
+  - [x] PCB Design / Layout
+  - [x] Order PCBs
   - [ ] Solder up
 - [x] Serverside functionality
   - [x] SIM808 POST to server
